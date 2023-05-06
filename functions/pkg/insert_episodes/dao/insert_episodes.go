@@ -24,7 +24,10 @@ func NewInsertEpisodesDao() *InsertEpisodesDao {
 }
 
 func (ied *InsertEpisodesDao) GetCurrentSeason() *models.Season {
-	currentSeasonName, err := models.Seasons(qm.Select("id", "name")).One(context.Background(), ied.DB)
+	currentSeasonName, err := models.Seasons(
+		qm.Select("id", "name"),
+		qm.OrderBy("updated_at desc"),
+	).One(context.Background(), ied.DB)
 	if err != nil {
 		log.Fatal(err)
 	}
