@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  anirec-batch:
+    image: tmp-friends/anirec-batch:latest
+    container_name: anirec-batch
+    volumes:
+      - ../..:/var/batch/
+    tty: true
+    ports:
+      - "18080:18080"
+    networks:
+      - anirec_network
+
+networks:
+  anirec_network:
+    external: true
