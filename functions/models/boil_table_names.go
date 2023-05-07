@@ -4,13 +4,13 @@
 package models
 
 var TableNames = struct {
+	PrismaMigrations string
 	Episodes         string
 	Seasons          string
 	Works            string
-	PrismaMigrations string
 }{
-	Episodes:         "Episodes",
-	Seasons:          "Seasons",
-	Works:            "Works",
 	PrismaMigrations: "_prisma_migrations",
+	Episodes:         "episodes",
+	Seasons:          "seasons",
+	Works:            "works",
 }

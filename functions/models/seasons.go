@@ -54,11 +54,11 @@ var SeasonTableColumns = struct {
 	CreatedAt string
 	UpdatedAt string
 }{
-	ID:        "Seasons.id",
-	Name:      "Seasons.name",
-	NameText:  "Seasons.name_text",
-	CreatedAt: "Seasons.created_at",
-	UpdatedAt: "Seasons.updated_at",
+	ID:        "seasons.id",
+	Name:      "seasons.name",
+	NameText:  "seasons.name_text",
+	CreatedAt: "seasons.created_at",
+	UpdatedAt: "seasons.updated_at",
 }
 
 // Generated where
@@ -70,11 +70,11 @@ var SeasonWhere = struct {
 	CreatedAt whereHelpertime_Time
 	UpdatedAt whereHelpertime_Time
 }{
-	ID:        whereHelperint{field: "\"Seasons\".\"id\""},
-	Name:      whereHelperstring{field: "\"Seasons\".\"name\""},
-	NameText:  whereHelperstring{field: "\"Seasons\".\"name_text\""},
-	CreatedAt: whereHelpertime_Time{field: "\"Seasons\".\"created_at\""},
-	UpdatedAt: whereHelpertime_Time{field: "\"Seasons\".\"updated_at\""},
+	ID:        whereHelperint{field: "\"seasons\".\"id\""},
+	Name:      whereHelperstring{field: "\"seasons\".\"name\""},
+	NameText:  whereHelperstring{field: "\"seasons\".\"name_text\""},
+	CreatedAt: whereHelpertime_Time{field: "\"seasons\".\"created_at\""},
+	UpdatedAt: whereHelpertime_Time{field: "\"seasons\".\"updated_at\""},
 }
 
 // SeasonRels is where relationship names are stored.
@@ -323,7 +323,7 @@ func (q seasonQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Seaso
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: failed to execute a one query for Seasons")
+		return nil, errors.Wrap(err, "models: failed to execute a one query for seasons")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -372,7 +372,7 @@ func (q seasonQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int6
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to count Seasons rows")
+		return 0, errors.Wrap(err, "models: failed to count seasons rows")
 	}
 
 	return count, nil
@@ -393,7 +393,7 @@ func (q seasonQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (boo
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "models: failed to check if Seasons exists")
+		return false, errors.Wrap(err, "models: failed to check if seasons exists")
 	}
 
 	return count > 0, nil
@@ -401,10 +401,10 @@ func (q seasonQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (boo
 
 // Seasons retrieves all the records using an executor.
 func Seasons(mods ...qm.QueryMod) seasonQuery {
-	mods = append(mods, qm.From("\"Seasons\""))
+	mods = append(mods, qm.From("\"seasons\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
-		queries.SetSelect(q, []string{"\"Seasons\".*"})
+		queries.SetSelect(q, []string{"\"seasons\".*"})
 	}
 
 	return seasonQuery{q}
@@ -425,7 +425,7 @@ func FindSeason(ctx context.Context, exec boil.ContextExecutor, iD int, selectCo
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"Seasons\" where \"id\"=$1", sel,
+		"select %s from \"seasons\" where \"id\"=$1", sel,
 	)
 
 	q := queries.Raw(query, iD)
@@ -435,7 +435,7 @@ func FindSeason(ctx context.Context, exec boil.ContextExecutor, iD int, selectCo
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: unable to select from Seasons")
+		return nil, errors.Wrap(err, "models: unable to select from seasons")
 	}
 
 	if err = seasonObj.doAfterSelectHooks(ctx, exec); err != nil {
@@ -454,7 +454,7 @@ func (o *Season) InsertG(ctx context.Context, columns boil.Columns) error {
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
 func (o *Season) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no Seasons provided for insertion")
+		return errors.New("models: no seasons provided for insertion")
 	}
 
 	var err error
@@ -497,9 +497,9 @@ func (o *Season) Insert(ctx context.Context, exec boil.ContextExecutor, columns 
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO \"Seasons\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO \"seasons\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO \"Seasons\" %sDEFAULT VALUES%s"
+			cache.query = "INSERT INTO \"seasons\" %sDEFAULT VALUES%s"
 		}
 
 		var queryOutput, queryReturning string
@@ -527,7 +527,7 @@ func (o *Season) Insert(ctx context.Context, exec boil.ContextExecutor, columns 
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "models: unable to insert into Seasons")
+		return errors.Wrap(err, "models: unable to insert into seasons")
 	}
 
 	if !cached {
@@ -574,10 +574,10 @@ func (o *Season) Update(ctx context.Context, exec boil.ContextExecutor, columns 
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("models: unable to update Seasons, could not build whitelist")
+			return 0, errors.New("models: unable to update seasons, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE \"Seasons\" SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE \"seasons\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
 			strmangle.WhereClause("\"", "\"", len(wl)+1, seasonPrimaryKeyColumns),
 		)
@@ -597,12 +597,12 @@ func (o *Season) Update(ctx context.Context, exec boil.ContextExecutor, columns 
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update Seasons row")
+		return 0, errors.Wrap(err, "models: unable to update seasons row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by update for Seasons")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by update for seasons")
 	}
 
 	if !cached {
@@ -625,12 +625,12 @@ func (q seasonQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, c
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all for Seasons")
+		return 0, errors.Wrap(err, "models: unable to update all for seasons")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for Seasons")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for seasons")
 	}
 
 	return rowsAff, nil
@@ -668,7 +668,7 @@ func (o SeasonSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, c
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE \"Seasons\" SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE \"seasons\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, seasonPrimaryKeyColumns, len(o)))
 
@@ -698,7 +698,7 @@ func (o *Season) UpsertG(ctx context.Context, updateOnConflict bool, conflictCol
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
 func (o *Season) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no Seasons provided for upsert")
+		return errors.New("models: no seasons provided for upsert")
 	}
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
@@ -763,7 +763,7 @@ func (o *Season) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOn
 		)
 
 		if updateOnConflict && len(update) == 0 {
-			return errors.New("models: unable to upsert Seasons, could not build update column list")
+			return errors.New("models: unable to upsert seasons, could not build update column list")
 		}
 
 		conflict := conflictColumns
@@ -771,7 +771,7 @@ func (o *Season) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOn
 			conflict = make([]string, len(seasonPrimaryKeyColumns))
 			copy(conflict, seasonPrimaryKeyColumns)
 		}
-		cache.query = buildUpsertQueryPostgres(dialect, "\"Seasons\"", updateOnConflict, ret, update, conflict, insert)
+		cache.query = buildUpsertQueryPostgres(dialect, "\"seasons\"", updateOnConflict, ret, update, conflict, insert)
 
 		cache.valueMapping, err = queries.BindMapping(seasonType, seasonMapping, insert)
 		if err != nil {
@@ -806,7 +806,7 @@ func (o *Season) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOn
 		_, err = exec.ExecContext(ctx, cache.query, vals...)
 	}
 	if err != nil {
-		return errors.Wrap(err, "models: unable to upsert Seasons")
+		return errors.Wrap(err, "models: unable to upsert seasons")
 	}
 
 	if !cached {
@@ -836,7 +836,7 @@ func (o *Season) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, 
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), seasonPrimaryKeyMapping)
-	sql := "DELETE FROM \"Seasons\" WHERE \"id\"=$1"
+	sql := "DELETE FROM \"seasons\" WHERE \"id\"=$1"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -845,12 +845,12 @@ func (o *Season) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, 
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete from Seasons")
+		return 0, errors.Wrap(err, "models: unable to delete from seasons")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for Seasons")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for seasons")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -874,12 +874,12 @@ func (q seasonQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from Seasons")
+		return 0, errors.Wrap(err, "models: unable to delete all from seasons")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for Seasons")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for seasons")
 	}
 
 	return rowsAff, nil
@@ -910,7 +910,7 @@ func (o SeasonSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM \"Seasons\" WHERE " +
+	sql := "DELETE FROM \"seasons\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, seasonPrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
@@ -925,7 +925,7 @@ func (o SeasonSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for Seasons")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for seasons")
 	}
 
 	if len(seasonAfterDeleteHooks) != 0 {
@@ -984,7 +984,7 @@ func (o *SeasonSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) 
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT \"Seasons\".* FROM \"Seasons\" WHERE " +
+	sql := "SELECT \"seasons\".* FROM \"seasons\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, seasonPrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
@@ -1007,7 +1007,7 @@ func SeasonExistsG(ctx context.Context, iD int) (bool, error) {
 // SeasonExists checks if the Season row exists.
 func SeasonExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"Seasons\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"seasons\" where \"id\"=$1 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1018,7 +1018,7 @@ func SeasonExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool,
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "models: unable to check if Seasons exists")
+		return false, errors.Wrap(err, "models: unable to check if seasons exists")
 	}
 
 	return exists, nil

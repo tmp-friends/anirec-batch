@@ -62,39 +62,16 @@ var EpisodeTableColumns = struct {
 	CreatedAt  string
 	UpdatedAt  string
 }{
-	ID:         "Episodes.id",
-	Number:     "Episodes.number",
-	SortNumber: "Episodes.sort_number",
-	Title:      "Episodes.title",
-	WorkID:     "Episodes.work_id",
-	CreatedAt:  "Episodes.created_at",
-	UpdatedAt:  "Episodes.updated_at",
+	ID:         "episodes.id",
+	Number:     "episodes.number",
+	SortNumber: "episodes.sort_number",
+	Title:      "episodes.title",
+	WorkID:     "episodes.work_id",
+	CreatedAt:  "episodes.created_at",
+	UpdatedAt:  "episodes.updated_at",
 }
 
 // Generated where
-
-type whereHelperint struct{ field string }
-
-func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-func (w whereHelperint) IN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelperint) NIN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
 
 type whereHelperfloat64 struct{ field string }
 
@@ -125,50 +102,6 @@ func (w whereHelperfloat64) NIN(slice []float64) qm.QueryMod {
 	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
 }
 
-type whereHelperstring struct{ field string }
-
-func (w whereHelperstring) EQ(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperstring) NEQ(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperstring) LT(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperstring) LTE(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperstring) GT(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperstring) GTE(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-func (w whereHelperstring) IN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-type whereHelpertime_Time struct{ field string }
-
-func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
-}
-func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
-}
-func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
 var EpisodeWhere = struct {
 	ID         whereHelperint
 	Number     whereHelperfloat64
@@ -178,13 +111,13 @@ var EpisodeWhere = struct {
 	CreatedAt  whereHelpertime_Time
 	UpdatedAt  whereHelpertime_Time
 }{
-	ID:         whereHelperint{field: "\"Episodes\".\"id\""},
-	Number:     whereHelperfloat64{field: "\"Episodes\".\"number\""},
-	SortNumber: whereHelperint{field: "\"Episodes\".\"sort_number\""},
-	Title:      whereHelperstring{field: "\"Episodes\".\"title\""},
-	WorkID:     whereHelperint{field: "\"Episodes\".\"work_id\""},
-	CreatedAt:  whereHelpertime_Time{field: "\"Episodes\".\"created_at\""},
-	UpdatedAt:  whereHelpertime_Time{field: "\"Episodes\".\"updated_at\""},
+	ID:         whereHelperint{field: "\"episodes\".\"id\""},
+	Number:     whereHelperfloat64{field: "\"episodes\".\"number\""},
+	SortNumber: whereHelperint{field: "\"episodes\".\"sort_number\""},
+	Title:      whereHelperstring{field: "\"episodes\".\"title\""},
+	WorkID:     whereHelperint{field: "\"episodes\".\"work_id\""},
+	CreatedAt:  whereHelpertime_Time{field: "\"episodes\".\"created_at\""},
+	UpdatedAt:  whereHelpertime_Time{field: "\"episodes\".\"updated_at\""},
 }
 
 // EpisodeRels is where relationship names are stored.
@@ -444,7 +377,7 @@ func (q episodeQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Epis
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: failed to execute a one query for Episodes")
+		return nil, errors.Wrap(err, "models: failed to execute a one query for episodes")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -493,7 +426,7 @@ func (q episodeQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to count Episodes rows")
+		return 0, errors.Wrap(err, "models: failed to count episodes rows")
 	}
 
 	return count, nil
@@ -514,7 +447,7 @@ func (q episodeQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bo
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "models: failed to check if Episodes exists")
+		return false, errors.Wrap(err, "models: failed to check if episodes exists")
 	}
 
 	return count > 0, nil
@@ -589,8 +522,8 @@ func (episodeL) LoadWork(ctx context.Context, e boil.ContextExecutor, singular b
 	}
 
 	query := NewQuery(
-		qm.From(`Works`),
-		qm.WhereIn(`Works.id in ?`, args...),
+		qm.From(`works`),
+		qm.WhereIn(`works.id in ?`, args...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -607,10 +540,10 @@ func (episodeL) LoadWork(ctx context.Context, e boil.ContextExecutor, singular b
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Works")
+		return errors.Wrap(err, "failed to close results of eager load for works")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Works")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for works")
 	}
 
 	if len(workAfterSelectHooks) != 0 {
@@ -631,7 +564,7 @@ func (episodeL) LoadWork(ctx context.Context, e boil.ContextExecutor, singular b
 		if foreign.R == nil {
 			foreign.R = &workR{}
 		}
-		foreign.R.WorkEpisodes = append(foreign.R.WorkEpisodes, object)
+		foreign.R.Episodes = append(foreign.R.Episodes, object)
 		return nil
 	}
 
@@ -642,7 +575,7 @@ func (episodeL) LoadWork(ctx context.Context, e boil.ContextExecutor, singular b
 				if foreign.R == nil {
 					foreign.R = &workR{}
 				}
-				foreign.R.WorkEpisodes = append(foreign.R.WorkEpisodes, local)
+				foreign.R.Episodes = append(foreign.R.Episodes, local)
 				break
 			}
 		}
@@ -653,7 +586,7 @@ func (episodeL) LoadWork(ctx context.Context, e boil.ContextExecutor, singular b
 
 // SetWorkG of the episode to the related item.
 // Sets o.R.Work to related.
-// Adds o to related.R.WorkEpisodes.
+// Adds o to related.R.Episodes.
 // Uses the global database handle.
 func (o *Episode) SetWorkG(ctx context.Context, insert bool, related *Work) error {
 	return o.SetWork(ctx, boil.GetContextDB(), insert, related)
@@ -661,7 +594,7 @@ func (o *Episode) SetWorkG(ctx context.Context, insert bool, related *Work) erro
 
 // SetWork of the episode to the related item.
 // Sets o.R.Work to related.
-// Adds o to related.R.WorkEpisodes.
+// Adds o to related.R.Episodes.
 func (o *Episode) SetWork(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Work) error {
 	var err error
 	if insert {
@@ -671,7 +604,7 @@ func (o *Episode) SetWork(ctx context.Context, exec boil.ContextExecutor, insert
 	}
 
 	updateQuery := fmt.Sprintf(
-		"UPDATE \"Episodes\" SET %s WHERE %s",
+		"UPDATE \"episodes\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, []string{"work_id"}),
 		strmangle.WhereClause("\"", "\"", 2, episodePrimaryKeyColumns),
 	)
@@ -697,10 +630,10 @@ func (o *Episode) SetWork(ctx context.Context, exec boil.ContextExecutor, insert
 
 	if related.R == nil {
 		related.R = &workR{
-			WorkEpisodes: EpisodeSlice{o},
+			Episodes: EpisodeSlice{o},
 		}
 	} else {
-		related.R.WorkEpisodes = append(related.R.WorkEpisodes, o)
+		related.R.Episodes = append(related.R.Episodes, o)
 	}
 
 	return nil
@@ -708,10 +641,10 @@ func (o *Episode) SetWork(ctx context.Context, exec boil.ContextExecutor, insert
 
 // Episodes retrieves all the records using an executor.
 func Episodes(mods ...qm.QueryMod) episodeQuery {
-	mods = append(mods, qm.From("\"Episodes\""))
+	mods = append(mods, qm.From("\"episodes\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
-		queries.SetSelect(q, []string{"\"Episodes\".*"})
+		queries.SetSelect(q, []string{"\"episodes\".*"})
 	}
 
 	return episodeQuery{q}
@@ -732,7 +665,7 @@ func FindEpisode(ctx context.Context, exec boil.ContextExecutor, iD int, selectC
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"Episodes\" where \"id\"=$1", sel,
+		"select %s from \"episodes\" where \"id\"=$1", sel,
 	)
 
 	q := queries.Raw(query, iD)
@@ -742,7 +675,7 @@ func FindEpisode(ctx context.Context, exec boil.ContextExecutor, iD int, selectC
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: unable to select from Episodes")
+		return nil, errors.Wrap(err, "models: unable to select from episodes")
 	}
 
 	if err = episodeObj.doAfterSelectHooks(ctx, exec); err != nil {
@@ -761,7 +694,7 @@ func (o *Episode) InsertG(ctx context.Context, columns boil.Columns) error {
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
 func (o *Episode) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no Episodes provided for insertion")
+		return errors.New("models: no episodes provided for insertion")
 	}
 
 	var err error
@@ -804,9 +737,9 @@ func (o *Episode) Insert(ctx context.Context, exec boil.ContextExecutor, columns
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO \"Episodes\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO \"episodes\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO \"Episodes\" %sDEFAULT VALUES%s"
+			cache.query = "INSERT INTO \"episodes\" %sDEFAULT VALUES%s"
 		}
 
 		var queryOutput, queryReturning string
@@ -834,7 +767,7 @@ func (o *Episode) Insert(ctx context.Context, exec boil.ContextExecutor, columns
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "models: unable to insert into Episodes")
+		return errors.Wrap(err, "models: unable to insert into episodes")
 	}
 
 	if !cached {
@@ -881,10 +814,10 @@ func (o *Episode) Update(ctx context.Context, exec boil.ContextExecutor, columns
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("models: unable to update Episodes, could not build whitelist")
+			return 0, errors.New("models: unable to update episodes, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE \"Episodes\" SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE \"episodes\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
 			strmangle.WhereClause("\"", "\"", len(wl)+1, episodePrimaryKeyColumns),
 		)
@@ -904,12 +837,12 @@ func (o *Episode) Update(ctx context.Context, exec boil.ContextExecutor, columns
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update Episodes row")
+		return 0, errors.Wrap(err, "models: unable to update episodes row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by update for Episodes")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by update for episodes")
 	}
 
 	if !cached {
@@ -932,12 +865,12 @@ func (q episodeQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, 
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all for Episodes")
+		return 0, errors.Wrap(err, "models: unable to update all for episodes")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for Episodes")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for episodes")
 	}
 
 	return rowsAff, nil
@@ -975,7 +908,7 @@ func (o EpisodeSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, 
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE \"Episodes\" SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE \"episodes\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, episodePrimaryKeyColumns, len(o)))
 
@@ -1005,7 +938,7 @@ func (o *Episode) UpsertG(ctx context.Context, updateOnConflict bool, conflictCo
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
 func (o *Episode) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no Episodes provided for upsert")
+		return errors.New("models: no episodes provided for upsert")
 	}
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
@@ -1070,7 +1003,7 @@ func (o *Episode) Upsert(ctx context.Context, exec boil.ContextExecutor, updateO
 		)
 
 		if updateOnConflict && len(update) == 0 {
-			return errors.New("models: unable to upsert Episodes, could not build update column list")
+			return errors.New("models: unable to upsert episodes, could not build update column list")
 		}
 
 		conflict := conflictColumns
@@ -1078,7 +1011,7 @@ func (o *Episode) Upsert(ctx context.Context, exec boil.ContextExecutor, updateO
 			conflict = make([]string, len(episodePrimaryKeyColumns))
 			copy(conflict, episodePrimaryKeyColumns)
 		}
-		cache.query = buildUpsertQueryPostgres(dialect, "\"Episodes\"", updateOnConflict, ret, update, conflict, insert)
+		cache.query = buildUpsertQueryPostgres(dialect, "\"episodes\"", updateOnConflict, ret, update, conflict, insert)
 
 		cache.valueMapping, err = queries.BindMapping(episodeType, episodeMapping, insert)
 		if err != nil {
@@ -1113,7 +1046,7 @@ func (o *Episode) Upsert(ctx context.Context, exec boil.ContextExecutor, updateO
 		_, err = exec.ExecContext(ctx, cache.query, vals...)
 	}
 	if err != nil {
-		return errors.Wrap(err, "models: unable to upsert Episodes")
+		return errors.Wrap(err, "models: unable to upsert episodes")
 	}
 
 	if !cached {
@@ -1143,7 +1076,7 @@ func (o *Episode) Delete(ctx context.Context, exec boil.ContextExecutor) (int64,
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), episodePrimaryKeyMapping)
-	sql := "DELETE FROM \"Episodes\" WHERE \"id\"=$1"
+	sql := "DELETE FROM \"episodes\" WHERE \"id\"=$1"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1152,12 +1085,12 @@ func (o *Episode) Delete(ctx context.Context, exec boil.ContextExecutor) (int64,
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete from Episodes")
+		return 0, errors.Wrap(err, "models: unable to delete from episodes")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for Episodes")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for episodes")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -1181,12 +1114,12 @@ func (q episodeQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) 
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from Episodes")
+		return 0, errors.Wrap(err, "models: unable to delete all from episodes")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for Episodes")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for episodes")
 	}
 
 	return rowsAff, nil
@@ -1217,7 +1150,7 @@ func (o EpisodeSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) 
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM \"Episodes\" WHERE " +
+	sql := "DELETE FROM \"episodes\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, episodePrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
@@ -1232,7 +1165,7 @@ func (o EpisodeSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) 
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for Episodes")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for episodes")
 	}
 
 	if len(episodeAfterDeleteHooks) != 0 {
@@ -1291,7 +1224,7 @@ func (o *EpisodeSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT \"Episodes\".* FROM \"Episodes\" WHERE " +
+	sql := "SELECT \"episodes\".* FROM \"episodes\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, episodePrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
@@ -1314,7 +1247,7 @@ func EpisodeExistsG(ctx context.Context, iD int) (bool, error) {
 // EpisodeExists checks if the Episode row exists.
 func EpisodeExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"Episodes\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"episodes\" where \"id\"=$1 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1325,7 +1258,7 @@ func EpisodeExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "models: unable to check if Episodes exists")
+		return false, errors.Wrap(err, "models: unable to check if episodes exists")
 	}
 
 	return exists, nil

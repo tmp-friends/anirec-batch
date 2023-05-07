@@ -25,6 +25,7 @@ import (
 type Work struct {
 	ID        int       `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Title     string    `boil:"title" json:"title" toml:"title" yaml:"title"`
+	Media     string    `boil:"media" json:"media" toml:"media" yaml:"media"`
 	SeasonID  int       `boil:"season_id" json:"season_id" toml:"season_id" yaml:"season_id"`
 	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
@@ -36,12 +37,14 @@ type Work struct {
 var WorkColumns = struct {
 	ID        string
 	Title     string
+	Media     string
 	SeasonID  string
 	CreatedAt string
 	UpdatedAt string
 }{
 	ID:        "id",
 	Title:     "title",
+	Media:     "media",
 	SeasonID:  "season_id",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
@@ -50,15 +53,17 @@ var WorkColumns = struct {
 var WorkTableColumns = struct {
 	ID        string
 	Title     string
+	Media     string
 	SeasonID  string
 	CreatedAt string
 	UpdatedAt string
 }{
-	ID:        "Works.id",
-	Title:     "Works.title",
-	SeasonID:  "Works.season_id",
-	CreatedAt: "Works.created_at",
-	UpdatedAt: "Works.updated_at",
+	ID:        "works.id",
+	Title:     "works.title",
+	Media:     "works.media",
+	SeasonID:  "works.season_id",
+	CreatedAt: "works.created_at",
+	UpdatedAt: "works.updated_at",
 }
 
 // Generated where
@@ -66,27 +71,29 @@ var WorkTableColumns = struct {
 var WorkWhere = struct {
 	ID        whereHelperint
 	Title     whereHelperstring
+	Media     whereHelperstring
 	SeasonID  whereHelperint
 	CreatedAt whereHelpertime_Time
 	UpdatedAt whereHelpertime_Time
 }{
-	ID:        whereHelperint{field: "\"Works\".\"id\""},
-	Title:     whereHelperstring{field: "\"Works\".\"title\""},
-	SeasonID:  whereHelperint{field: "\"Works\".\"season_id\""},
-	CreatedAt: whereHelpertime_Time{field: "\"Works\".\"created_at\""},
-	UpdatedAt: whereHelpertime_Time{field: "\"Works\".\"updated_at\""},
+	ID:        whereHelperint{field: "\"works\".\"id\""},
+	Title:     whereHelperstring{field: "\"works\".\"title\""},
+	Media:     whereHelperstring{field: "\"works\".\"media\""},
+	SeasonID:  whereHelperint{field: "\"works\".\"season_id\""},
+	CreatedAt: whereHelpertime_Time{field: "\"works\".\"created_at\""},
+	UpdatedAt: whereHelpertime_Time{field: "\"works\".\"updated_at\""},
 }
 
 // WorkRels is where relationship names are stored.
 var WorkRels = struct {
-	WorkEpisodes string
+	Episodes string
 }{
-	WorkEpisodes: "WorkEpisodes",
+	Episodes: "Episodes",
 }
 
 // workR is where relationships are stored.
 type workR struct {
-	WorkEpisodes EpisodeSlice `boil:"WorkEpisodes" json:"WorkEpisodes" toml:"WorkEpisodes" yaml:"WorkEpisodes"`
+	Episodes EpisodeSlice `boil:"Episodes" json:"Episodes" toml:"Episodes" yaml:"Episodes"`
 }
 
 // NewStruct creates a new relationship struct
@@ -94,19 +101,19 @@ func (*workR) NewStruct() *workR {
 	return &workR{}
 }
 
-func (r *workR) GetWorkEpisodes() EpisodeSlice {
+func (r *workR) GetEpisodes() EpisodeSlice {
 	if r == nil {
 		return nil
 	}
-	return r.WorkEpisodes
+	return r.Episodes
 }
 
 // workL is where Load methods for each relationship are stored.
 type workL struct{}
 
 var (
-	workAllColumns            = []string{"id", "title", "season_id", "created_at", "updated_at"}
-	workColumnsWithoutDefault = []string{"id", "title", "season_id"}
+	workAllColumns            = []string{"id", "title", "media", "season_id", "created_at", "updated_at"}
+	workColumnsWithoutDefault = []string{"id", "title", "media", "season_id"}
 	workColumnsWithDefault    = []string{"created_at", "updated_at"}
 	workPrimaryKeyColumns     = []string{"id"}
 	workGeneratedColumns      = []string{}
@@ -334,7 +341,7 @@ func (q workQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Work, e
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: failed to execute a one query for Works")
+		return nil, errors.Wrap(err, "models: failed to execute a one query for works")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -383,7 +390,7 @@ func (q workQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64,
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to count Works rows")
+		return 0, errors.Wrap(err, "models: failed to count works rows")
 	}
 
 	return count, nil
@@ -404,29 +411,29 @@ func (q workQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool,
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "models: failed to check if Works exists")
+		return false, errors.Wrap(err, "models: failed to check if works exists")
 	}
 
 	return count > 0, nil
 }
 
-// WorkEpisodes retrieves all the Episode's Episodes with an executor via work_id column.
-func (o *Work) WorkEpisodes(mods ...qm.QueryMod) episodeQuery {
+// Episodes retrieves all the episode's Episodes with an executor.
+func (o *Work) Episodes(mods ...qm.QueryMod) episodeQuery {
 	var queryMods []qm.QueryMod
 	if len(mods) != 0 {
 		queryMods = append(queryMods, mods...)
 	}
 
 	queryMods = append(queryMods,
-		qm.Where("\"Episodes\".\"work_id\"=?", o.ID),
+		qm.Where("\"episodes\".\"work_id\"=?", o.ID),
 	)
 
 	return Episodes(queryMods...)
 }
 
-// LoadWorkEpisodes allows an eager lookup of values, cached into the
+// LoadEpisodes allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (workL) LoadWorkEpisodes(ctx context.Context, e boil.ContextExecutor, singular bool, maybeWork interface{}, mods queries.Applicator) error {
+func (workL) LoadEpisodes(ctx context.Context, e boil.ContextExecutor, singular bool, maybeWork interface{}, mods queries.Applicator) error {
 	var slice []*Work
 	var object *Work
 
@@ -480,8 +487,8 @@ func (workL) LoadWorkEpisodes(ctx context.Context, e boil.ContextExecutor, singu
 	}
 
 	query := NewQuery(
-		qm.From(`Episodes`),
-		qm.WhereIn(`Episodes.work_id in ?`, args...),
+		qm.From(`episodes`),
+		qm.WhereIn(`episodes.work_id in ?`, args...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -489,19 +496,19 @@ func (workL) LoadWorkEpisodes(ctx context.Context, e boil.ContextExecutor, singu
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load Episodes")
+		return errors.Wrap(err, "failed to eager load episodes")
 	}
 
 	var resultSlice []*Episode
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Episodes")
+		return errors.Wrap(err, "failed to bind eager loaded slice episodes")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on Episodes")
+		return errors.Wrap(err, "failed to close results in eager load on episodes")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Episodes")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for episodes")
 	}
 
 	if len(episodeAfterSelectHooks) != 0 {
@@ -512,7 +519,7 @@ func (workL) LoadWorkEpisodes(ctx context.Context, e boil.ContextExecutor, singu
 		}
 	}
 	if singular {
-		object.R.WorkEpisodes = resultSlice
+		object.R.Episodes = resultSlice
 		for _, foreign := range resultSlice {
 			if foreign.R == nil {
 				foreign.R = &episodeR{}
@@ -525,7 +532,7 @@ func (workL) LoadWorkEpisodes(ctx context.Context, e boil.ContextExecutor, singu
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
 			if local.ID == foreign.WorkID {
-				local.R.WorkEpisodes = append(local.R.WorkEpisodes, foreign)
+				local.R.Episodes = append(local.R.Episodes, foreign)
 				if foreign.R == nil {
 					foreign.R = &episodeR{}
 				}
@@ -538,20 +545,20 @@ func (workL) LoadWorkEpisodes(ctx context.Context, e boil.ContextExecutor, singu
 	return nil
 }
 
-// AddWorkEpisodesG adds the given related objects to the existing relationships
-// of the Work, optionally inserting them as new records.
-// Appends related to o.R.WorkEpisodes.
+// AddEpisodesG adds the given related objects to the existing relationships
+// of the work, optionally inserting them as new records.
+// Appends related to o.R.Episodes.
 // Sets related.R.Work appropriately.
 // Uses the global database handle.
-func (o *Work) AddWorkEpisodesG(ctx context.Context, insert bool, related ...*Episode) error {
-	return o.AddWorkEpisodes(ctx, boil.GetContextDB(), insert, related...)
+func (o *Work) AddEpisodesG(ctx context.Context, insert bool, related ...*Episode) error {
+	return o.AddEpisodes(ctx, boil.GetContextDB(), insert, related...)
 }
 
-// AddWorkEpisodes adds the given related objects to the existing relationships
-// of the Work, optionally inserting them as new records.
-// Appends related to o.R.WorkEpisodes.
+// AddEpisodes adds the given related objects to the existing relationships
+// of the work, optionally inserting them as new records.
+// Appends related to o.R.Episodes.
 // Sets related.R.Work appropriately.
-func (o *Work) AddWorkEpisodes(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Episode) error {
+func (o *Work) AddEpisodes(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Episode) error {
 	var err error
 	for _, rel := range related {
 		if insert {
@@ -561,7 +568,7 @@ func (o *Work) AddWorkEpisodes(ctx context.Context, exec boil.ContextExecutor, i
 			}
 		} else {
 			updateQuery := fmt.Sprintf(
-				"UPDATE \"Episodes\" SET %s WHERE %s",
+				"UPDATE \"episodes\" SET %s WHERE %s",
 				strmangle.SetParamNames("\"", "\"", 1, []string{"work_id"}),
 				strmangle.WhereClause("\"", "\"", 2, episodePrimaryKeyColumns),
 			)
@@ -582,10 +589,10 @@ func (o *Work) AddWorkEpisodes(ctx context.Context, exec boil.ContextExecutor, i
 
 	if o.R == nil {
 		o.R = &workR{
-			WorkEpisodes: related,
+			Episodes: related,
 		}
 	} else {
-		o.R.WorkEpisodes = append(o.R.WorkEpisodes, related...)
+		o.R.Episodes = append(o.R.Episodes, related...)
 	}
 
 	for _, rel := range related {
@@ -602,10 +609,10 @@ func (o *Work) AddWorkEpisodes(ctx context.Context, exec boil.ContextExecutor, i
 
 // Works retrieves all the records using an executor.
 func Works(mods ...qm.QueryMod) workQuery {
-	mods = append(mods, qm.From("\"Works\""))
+	mods = append(mods, qm.From("\"works\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
-		queries.SetSelect(q, []string{"\"Works\".*"})
+		queries.SetSelect(q, []string{"\"works\".*"})
 	}
 
 	return workQuery{q}
@@ -626,7 +633,7 @@ func FindWork(ctx context.Context, exec boil.ContextExecutor, iD int, selectCols
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"Works\" where \"id\"=$1", sel,
+		"select %s from \"works\" where \"id\"=$1", sel,
 	)
 
 	q := queries.Raw(query, iD)
@@ -636,7 +643,7 @@ func FindWork(ctx context.Context, exec boil.ContextExecutor, iD int, selectCols
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: unable to select from Works")
+		return nil, errors.Wrap(err, "models: unable to select from works")
 	}
 
 	if err = workObj.doAfterSelectHooks(ctx, exec); err != nil {
@@ -655,7 +662,7 @@ func (o *Work) InsertG(ctx context.Context, columns boil.Columns) error {
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
 func (o *Work) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no Works provided for insertion")
+		return errors.New("models: no works provided for insertion")
 	}
 
 	var err error
@@ -698,9 +705,9 @@ func (o *Work) Insert(ctx context.Context, exec boil.ContextExecutor, columns bo
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO \"Works\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO \"works\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO \"Works\" %sDEFAULT VALUES%s"
+			cache.query = "INSERT INTO \"works\" %sDEFAULT VALUES%s"
 		}
 
 		var queryOutput, queryReturning string
@@ -728,7 +735,7 @@ func (o *Work) Insert(ctx context.Context, exec boil.ContextExecutor, columns bo
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "models: unable to insert into Works")
+		return errors.Wrap(err, "models: unable to insert into works")
 	}
 
 	if !cached {
@@ -775,10 +782,10 @@ func (o *Work) Update(ctx context.Context, exec boil.ContextExecutor, columns bo
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("models: unable to update Works, could not build whitelist")
+			return 0, errors.New("models: unable to update works, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE \"Works\" SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE \"works\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
 			strmangle.WhereClause("\"", "\"", len(wl)+1, workPrimaryKeyColumns),
 		)
@@ -798,12 +805,12 @@ func (o *Work) Update(ctx context.Context, exec boil.ContextExecutor, columns bo
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update Works row")
+		return 0, errors.Wrap(err, "models: unable to update works row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by update for Works")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by update for works")
 	}
 
 	if !cached {
@@ -826,12 +833,12 @@ func (q workQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all for Works")
+		return 0, errors.Wrap(err, "models: unable to update all for works")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for Works")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for works")
 	}
 
 	return rowsAff, nil
@@ -869,7 +876,7 @@ func (o WorkSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE \"Works\" SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE \"works\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, workPrimaryKeyColumns, len(o)))
 
@@ -899,7 +906,7 @@ func (o *Work) UpsertG(ctx context.Context, updateOnConflict bool, conflictColum
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
 func (o *Work) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no Works provided for upsert")
+		return errors.New("models: no works provided for upsert")
 	}
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
@@ -964,7 +971,7 @@ func (o *Work) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCo
 		)
 
 		if updateOnConflict && len(update) == 0 {
-			return errors.New("models: unable to upsert Works, could not build update column list")
+			return errors.New("models: unable to upsert works, could not build update column list")
 		}
 
 		conflict := conflictColumns
@@ -972,7 +979,7 @@ func (o *Work) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCo
 			conflict = make([]string, len(workPrimaryKeyColumns))
 			copy(conflict, workPrimaryKeyColumns)
 		}
-		cache.query = buildUpsertQueryPostgres(dialect, "\"Works\"", updateOnConflict, ret, update, conflict, insert)
+		cache.query = buildUpsertQueryPostgres(dialect, "\"works\"", updateOnConflict, ret, update, conflict, insert)
 
 		cache.valueMapping, err = queries.BindMapping(workType, workMapping, insert)
 		if err != nil {
@@ -1007,7 +1014,7 @@ func (o *Work) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCo
 		_, err = exec.ExecContext(ctx, cache.query, vals...)
 	}
 	if err != nil {
-		return errors.Wrap(err, "models: unable to upsert Works")
+		return errors.Wrap(err, "models: unable to upsert works")
 	}
 
 	if !cached {
@@ -1037,7 +1044,7 @@ func (o *Work) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, er
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), workPrimaryKeyMapping)
-	sql := "DELETE FROM \"Works\" WHERE \"id\"=$1"
+	sql := "DELETE FROM \"works\" WHERE \"id\"=$1"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1046,12 +1053,12 @@ func (o *Work) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, er
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete from Works")
+		return 0, errors.Wrap(err, "models: unable to delete from works")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for Works")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for works")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -1075,12 +1082,12 @@ func (q workQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from Works")
+		return 0, errors.Wrap(err, "models: unable to delete all from works")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for Works")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for works")
 	}
 
 	return rowsAff, nil
@@ -1111,7 +1118,7 @@ func (o WorkSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM \"Works\" WHERE " +
+	sql := "DELETE FROM \"works\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, workPrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
@@ -1126,7 +1133,7 @@ func (o WorkSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for Works")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for works")
 	}
 
 	if len(workAfterDeleteHooks) != 0 {
@@ -1185,7 +1192,7 @@ func (o *WorkSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) er
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT \"Works\".* FROM \"Works\" WHERE " +
+	sql := "SELECT \"works\".* FROM \"works\" WHERE " +
 		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, workPrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
@@ -1208,7 +1215,7 @@ func WorkExistsG(ctx context.Context, iD int) (bool, error) {
 // WorkExists checks if the Work row exists.
 func WorkExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"Works\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"works\" where \"id\"=$1 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1219,7 +1226,7 @@ func WorkExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, e
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "models: unable to check if Works exists")
+		return false, errors.Wrap(err, "models: unable to check if works exists")
 	}
 
 	return exists, nil
