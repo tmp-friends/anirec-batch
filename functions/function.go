@@ -8,6 +8,7 @@ import (
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	"github.com/joho/godotenv"
 	insertEpisodesLogic "github.com/tmp-friends/anirec-batch/functions/pkg/insert_episodes/logic"
+	insertRecordsLogic "github.com/tmp-friends/anirec-batch/functions/pkg/insert_records/logic"
 )
 
 // Targetの定義
@@ -15,6 +16,7 @@ func init() {
 	loadEnv()
 
 	functions.HTTP("InsertEpisodes", insertEpisodes)
+	functions.HTTP("InsertRecords", insertRecords)
 }
 
 func loadEnv() {
@@ -29,4 +31,9 @@ func loadEnv() {
 func insertEpisodes(w http.ResponseWriter, r *http.Request) {
 	iel := insertEpisodesLogic.NewInsertEpisodesLogic()
 	iel.DoExecute()
+}
+
+func insertRecords(w http.ResponseWriter, r *http.Request) {
+	irl := insertRecordsLogic.NewInsertRecordsLogic()
+	irl.DoExecute()
 }
