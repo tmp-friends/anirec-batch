@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"database/sql"
-	"log"
 
 	"github.com/tmp-friends/anirec-batch/functions/models"
 	"github.com/tmp-friends/anirec-batch/functions/pkg/config"
@@ -23,16 +22,16 @@ func NewInsertEpisodesDao() *InsertEpisodesDao {
 	}
 }
 
-func (ied *InsertEpisodesDao) GetCurrentSeason() *models.Season {
+func (ied *InsertEpisodesDao) GetCurrentSeason() (*models.Season, error) {
 	currentSeasonName, err := models.Seasons(
 		qm.Select("id", "name"),
 		qm.OrderBy("updated_at desc"),
 	).One(context.Background(), ied.DB)
 	if err != nil {
-		log.Fatal(err)
+		return &models.Season{}, err
 	}
 
-	return currentSeasonName
+	return currentSeasonName, nil
 }
 
 func (ied *InsertEpisodesDao) InsertWorks(works models.WorkSlice) error {

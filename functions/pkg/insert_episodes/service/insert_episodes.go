@@ -25,10 +25,13 @@ func NewInsertEpisodesService() *InsertEpisodesService {
 
 func (ies *InsertEpisodesService) GetWorks() (models.WorkSlice, error) {
 	// DBから今期のseason_nameを取得する
-	currentSeason := ies.dao.GetCurrentSeason()
+	currentSeason, err := ies.dao.GetCurrentSeason()
+	if err != nil {
+		return models.WorkSlice{}, err
+	}
 
 	// 今期のアニメ作品情報をAnnictAPIから取得する
-	works, err := ies.lib.GetWorks(currentSeason.Name)
+	works, err := ies.lib.FetchWorks(currentSeason.Name)
 	if err != nil {
 		return models.WorkSlice{}, err
 	}
@@ -44,7 +47,7 @@ func (ies *InsertEpisodesService) GetEpisodes(workIds []int) (models.EpisodeSlic
 	// 今期のアニメエピソード情報をAnnictAPIから取得する
 	var episodes models.EpisodeSlice
 	for _, workId := range workIds {
-		res, err := ies.lib.GetEpisodes(workId)
+		res, err := ies.lib.FetchEpisodes(workId)
 		if err != nil {
 			return models.EpisodeSlice{}, err
 		}
